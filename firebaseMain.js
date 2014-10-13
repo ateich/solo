@@ -5,6 +5,7 @@ var players = {};
 var thisPlayer;
 var username = 'Player2';
 
+
 var startGame = function(){
 	username = document.getElementById('playerName').value;
 	thisPlayer = usersRef.child(username); //Firebase object
@@ -41,13 +42,27 @@ usersRef.on('child_changed', function(snapshot){
 		
 		//Move player to new location on screen (101 now, change later)
   	console.log("FB SET MAP LOCATION: (", player.x, ", ", player.y, ") to ", 101);
-		map.set(player.x, player.y, 101);
+  	if(player.health <= 0){
+			//die
+			//201 = death animation or color change
+			map.set(player.x, player.y, 201);
+		}else{
+			map.set(player.x, player.y, 101);
+		}
 
 		//Update player list
 		players[player.username] = player;
 	} else if(player.health !== oldPlayer.health){
 		//update player health as necessary
 		oldPlayer.health = player.health;
+		if(oldPlayer.health <= 0){
+			//die leaving your body behind for x seconds
+			setTimeout(function(){
+				var reset = {username:username, x:0, y:0, health:100};
+				updatePlayer(reset);
+				players[username] = reset;
+			}, 1000);
+		}
 	}
 });
 

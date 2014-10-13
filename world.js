@@ -134,6 +134,7 @@ function Map(size) {
   this.skybox = new Bitmap('assets/deathvalley_panorama.jpg', 2000, 750);
   this.wallTexture = new Bitmap('assets/wall_texture.jpg', 1024, 1024);
   this.playerTexture = new Bitmap('assets/player_texture.jpg', 1024, 1024);
+  this.deathTexture = new Bitmap('assets/death_texture.jpg', 1024, 1024);
   this.light = 0;
 }
 
@@ -293,8 +294,10 @@ Camera.prototype.drawColumn = function(column, ray, angle, map) {
   for (var s = ray.length - 1; s >= 0; s--) {
     var step = ray[s];
 
-    if(step.height >= 2){
-      // console.log('spotted a player');
+    if(step.height >= 200){
+      texture = map.deathTexture;
+      step.height=1;
+    }else if(step.height >= 100){
       texture = map.playerTexture;
       step.height=1;
     }
