@@ -269,7 +269,7 @@ Camera.prototype.drawColumn = function(column, ray, angle, map) {
       ctx.globalAlpha = 1;
       ctx.drawImage(texture.image, textureX, 0, 1, texture.height, left, wall.top, width, wall.height);
       
-      ctx.fillStyle = '#000000';
+      ctx.fillStyle = '#FFFFFF';//#000000';
       ctx.globalAlpha = Math.max((step.distance + step.shading) / this.lightRange - map.light, 0);
       ctx.fillRect(left, wall.top, width, wall.height);
     }
