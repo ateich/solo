@@ -10,8 +10,8 @@ var startGame = function(){
 	thisPlayer = usersRef.child(username); //Firebase object
 	thisPlayer.update({username:username, health:'100', x:'0', y:'0'});
 
-	document.getElementById('main').style.visibility = 'hidden';
-	gameCell.style.visibility = "visible";
+	document.getElementById('main').style.display = 'none';
+	gameCell.style.display = "block";
 };
 
 //Separate users from players in a game
@@ -45,6 +45,9 @@ usersRef.on('child_changed', function(snapshot){
 
 		//Update player list
 		players[player.username] = player;
+	} else if(player.health !== oldPlayer.health){
+		//update player health as necessary
+		oldPlayer.health = player.health;
 	}
 });
 
@@ -57,12 +60,26 @@ var updatePlayerPosition = function(x,y){
 	updatePlayer({x: x, y:y});
 };
 
+var updatePlayerHealth = function(healthAddition){
+	var health = parseInt(players[username].health) + healthAddition + '';
+	updatePlayer({health: health});
+}
+
 //Passes player object to callback, for each player
 var eachPlayer = function(callback){
+	console.log('each player, ', players);
 	for(var key in players){
 		callback(players[key]);
 	}
 };	
+
+var getPlayer = function(name){
+	return usersRef.child(name);
+}
+
+var setPlayer = function(player, obj){
+	player.update(obj);
+}
 
 //If the user closes the window, they leave the game
 window.onbeforeunload = function(e) {

@@ -1,5 +1,5 @@
 var gameCell = document.getElementById('game');
-gameCell.style.visibility = 'hidden';
+gameCell.style.display = 'none';
 
 var CIRCLE = Math.PI * 2;
 var MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
@@ -65,13 +65,54 @@ Player.prototype.walk = function(distance, map) {
 
   //If the map doesn't have anything at this location, walk to it
   var changedPosition = false;
+  var hitPlayer = {};
+
   if (map.get(this.x + dx, this.y) <= 0){
     this.x += dx;
     changedPosition = true;
+  } else {
+    //X collision
+    if(map.get(this.x + dx, this.y) >= 100){
+      //hit player
+      hitPlayer.x = this.x+dx;
+    }
   }
   if (map.get(this.x, this.y + dy) <= 0){
     this.y += dy;
     changedPosition = true;
+  } else {
+    //Y collision
+    if(map.get(this.x, this.y + dy) >= 100){
+      //hit player
+      hitPlayer.y = this.y+dy;
+    }
+  }
+
+  if(hitPlayer.x || hitPlayer.y){
+    //this player loses health
+    console.log('losing health');
+    var healthAddition = -10;
+
+    //other player loses health -- in theory...
+    hitPlayer.x = hitPlayer.x || this.x;
+    hitPlayer.y = hitPlayer.y || this.y;
+    var playerLocation = {x: Math.floor(hitPlayer.x), y:Math.floor(hitPlayer.y)};
+
+    eachPlayer(function(player){
+      console.log('name: ', player.username, ' at (', player.x, ', ', player.y ,')');
+      console.log('vs at (', playerLocation.x, ',', playerLocation.y,  ')')
+      if(Math.floor(player.x) === playerLocation.x || Math.floor(player.y) === playerLocation.y){
+        console.log('hit ', player.username);
+
+        var hitPlayer = getPlayer(player.username);
+        var health = parseInt(player.health) + healthAddition + '';
+        setPlayer(hitPlayer, {health: health});
+        
+        updatePlayerHealth(healthAddition);
+        return;
+      }
+    });
+
   }
 
   if(changedPosition){
