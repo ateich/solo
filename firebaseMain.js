@@ -1,6 +1,5 @@
 //Each game has its own URL for user data
 
-
 var usersRef = new Firebase('https://mvpfps.firebaseio.com');
 var players = {};
 var thisPlayer;
@@ -64,3 +63,8 @@ var eachPlayer = function(callback){
 		callback(players[key]);
 	}
 };	
+
+//If the user closes the window, they leave the game
+window.onbeforeunload = function(e) {
+  thisPlayer.remove();
+};
