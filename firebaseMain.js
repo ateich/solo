@@ -89,6 +89,15 @@ usersRef.on('child_changed', function(snapshot){
 			//die
 			//201 = death animation or color change
 			map.set(player.x, player.y, 201);
+			
+			document.getElementById('gameMessage').innerHTML = '<h1>' + player.killedBy + ' killed ' + player.username + '.</h1>';
+			gameMessage.style.display = 'block';
+
+			setTimeout(function(){
+				document.getElementById('gameMessage').innerHTML = '';
+				gameMessage.style.display = 'none';
+			},3000);
+			
 		}else{
 			map.set(player.x, player.y, 101);
 		}
