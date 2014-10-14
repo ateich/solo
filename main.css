@@ -48,3 +48,18 @@ input{
 	color:white;
 	text-align: center;
 }
+
+#gameMessage{
+	position: absolute;
+	text-align: center;
+	color:white;
+	width:100%;
+	x:0;
+	y:0;
+	z-index: 10;
+}
+
+#gameMessage h1{
+	padding-top:10px;
+	color:white;
+}

@@ -54,7 +54,16 @@ usersRef.on('child_added', function(snapshot) {
 });
 
 usersRef.on('child_removed', function(snapshot){
-	delete players[snapshot.val().username];
+	var playerName = snapshot.val().username;
+	document.getElementById('gameMessage').innerHTML = '<h1>' + playerName + ' has left the game.</h1>';
+	gameMessage.style.display = 'block';
+
+	setTimeout(function(){
+		document.getElementById('gameMessage').innerHTML = '';
+		gameMessage.style.display = 'none';
+	},3000);
+
+	delete players[playerName];
 	var numPlayers = Object.keys(players).length;
 	 if(numPlayers === 1){
 			document.getElementById('numPlayers').innerHTML = numPlayers +' Player is in the Game';
