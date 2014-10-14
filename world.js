@@ -1,6 +1,11 @@
 var gameCell = document.getElementById('game');
+var deathCell = document.getElementById('death');
+var hitCell = document.getElementById('hit');
+
 gameCell.style.display = 'none';
-death.style.display = 'none';
+deathCell.style.display = 'none';
+hitCell.style.display = 'none';
+
 var hitDelay = false;
 var shotDelay = false;
 

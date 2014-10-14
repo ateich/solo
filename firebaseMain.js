@@ -66,6 +66,7 @@ usersRef.on('child_changed', function(snapshot){
 		console.log('Firebase says you have been hurt!');
 		oldPlayer.health = player.health;
 		document.getElementById('health').innerHTML = 'Health: ' + oldPlayer.health;
+		redFlash();
 
 		if(oldPlayer.health <= 0){
 			//die leaving your body behind for x seconds
@@ -145,3 +146,11 @@ var setPlayer = function(player, obj){
 window.onbeforeunload = function(e) {
   thisPlayer.remove();
 };
+
+var redFlash = function(){
+	//set screen to red, then back to normal
+	hitCell.style.display="block";
+	setTimeout(function(){
+		hitCell.style.display = "none";
+	},250);
+}
