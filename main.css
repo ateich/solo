@@ -21,3 +21,20 @@
 	padding-top:2em;
 }
 
+#playerName{
+	width:200px;
+	height:25px;
+}
+#joinGame{
+	padding:10px;
+	border-radius: 5px;
+}
+
+input{
+	text-align:center;
+}
+
+#main{
+	color:white;
+	text-align: center;
+}

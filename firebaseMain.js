@@ -10,6 +10,11 @@ var kills = 0;
 
 var startGame = function(){
 	username = document.getElementById('playerName').value;
+	if(players[username]){
+		document.getElementById('playerName').value = '';
+		alert(username + ' is already in the game. Choose another name.');
+		return;
+	}
 	thisPlayer = usersRef.child(username); //Firebase object
 	thisPlayer.update({username:username, health:'100', x:'0', y:'0'});
 
