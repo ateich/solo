@@ -4,6 +4,8 @@ var usersRef = new Firebase('https://mvpfps.firebaseio.com');
 var players = {};
 var thisPlayer;
 var username = 'Player2';
+var deaths = 0;
+var kills = 0;
 
 
 var startGame = function(){
@@ -34,7 +36,6 @@ usersRef.on('child_changed', function(snapshot){
 	var oldPlayer = players[player.username];
 
 	//Don't update your own screen position via Firebase
-	// console.log(player.username, ' : ', username);
 	if(player.username != username){
 		//Remove player on screen
   	// console.log("FB SET MAP LOCATION: (", oldPlayer.x, ", ", oldPlayer.y, ") to ", 0);
@@ -52,11 +53,15 @@ usersRef.on('child_changed', function(snapshot){
 
 		//Update player list
 		players[player.username] = player;
+
 	} else if(player.health !== oldPlayer.health){
+
 		//update player health as necessary
 		oldPlayer.health = player.health;
 		if(oldPlayer.health <= 0){
 			//die leaving your body behind for x seconds
+			deaths++;
+			document.getElementById('deaths').innerHTML = 'Deaths: ' + deaths;
 			setTimeout(function(){
 				var reset = {username:username, x:0, y:0, health:100};
 				updatePlayer(reset);
@@ -78,6 +83,7 @@ var updatePlayerPosition = function(x,y){
 var updatePlayerHealth = function(healthAddition){
 	var health = parseInt(players[username].health) + healthAddition + '';
 	updatePlayer({health: health});
+	document.getElementById('health').innerHTML = 'Health: ' + health;
 }
 
 //Passes player object to callback, for each player

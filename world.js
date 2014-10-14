@@ -107,7 +107,11 @@ Player.prototype.walk = function(distance, map) {
         var hitPlayer = getPlayer(player.username);
         var health = parseInt(player.health) + healthAddition + '';
         setPlayer(hitPlayer, {health: health});
-        
+        if(health <= 0){
+          kills++;
+          document.getElementById('kills').innerHTML = 'Kills: ' + kills;
+        }
+
         updatePlayerHealth(healthAddition);
         return;
       }
