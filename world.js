@@ -8,6 +8,7 @@ hitCell.style.display = 'none';
 
 var hitDelay = false;
 var shotDelay = false;
+var firingWeapon = false;
 
 var CIRCLE = Math.PI * 2;
 var MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
@@ -60,6 +61,7 @@ function Player(x, y, direction) {
   this.direction = direction;
   // this.weapon = new Bitmap('assets/knife_hand.png', 319, 320);
   this.weapon = new Bitmap('assets/gunHand1.png', 319, 320);
+  this.fireWeapon = new Bitmap('assets/gunHand2.png', 319, 320);
   this.paces = 0;
 }
 
@@ -161,6 +163,11 @@ Player.prototype.fire = function(){
     return;
   }
 
+  firingWeapon = true;
+
+  setTimeout(function(){
+    firingWeapon = false;
+  }, 100);
 
   // var x = column / camera.resolution - 0.5;
   // var angle = Math.atan2(x, camera.focalLength);
@@ -343,7 +350,11 @@ function Camera(canvas, resolution, focalLength) {
 Camera.prototype.render = function(player, map) {
   this.drawSky(player.direction, map.skybox, map.light);
   this.drawColumns(player, map);
-  this.drawWeapon(player.weapon, player.paces);
+  if(firingWeapon){
+    this.drawWeapon(player.fireWeapon, player.paces);
+  } else{
+    this.drawWeapon(player.weapon, player.paces);
+  }
 };
 
 Camera.prototype.drawSky = function(direction, sky, ambient) {
