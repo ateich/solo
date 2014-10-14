@@ -164,8 +164,8 @@ Map.prototype.get = function(x, y) {
 
 //map.set
 Map.prototype.set = function(x, y, num){
-  console.log("SET MAP LOCATION: (", x, ", ", y, ") to ", num);
-  console.log("Wall grid: ", this.wallGrid);
+  // console.log("SET MAP LOCATION: (", x, ", ", y, ") to ", num);
+  // console.log("Wall grid: ", this.wallGrid);
   x = Math.floor(x);
   y = Math.floor(y);
 

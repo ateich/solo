@@ -58,7 +58,10 @@ usersRef.on('child_changed', function(snapshot){
 	else if(player.health !== oldPlayer.health){
 
 		//update player health as necessary
+		console.log('Firebase says you have been hurt!');
 		oldPlayer.health = player.health;
+		document.getElementById('health').innerHTML = 'Health: ' + oldPlayer.health;
+
 		if(oldPlayer.health <= 0){
 			//die leaving your body behind for x seconds
 			console.log('Firebase says you died!');
