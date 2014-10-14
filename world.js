@@ -2,13 +2,14 @@ var gameCell = document.getElementById('game');
 gameCell.style.display = 'none';
 death.style.display = 'none';
 var hitDelay = false;
+var shotDelay = false;
 
 var CIRCLE = Math.PI * 2;
 var MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
 
 function Controls() {
-  this.codes  = { 37: 'left', 39: 'right', 38: 'forward', 40: 'backward' };
-  this.states = { 'left': false, 'right': false, 'forward': false, 'backward': false };
+  this.codes  = { 37: 'left', 39: 'right', 38: 'forward', 40: 'backward', 32:'fire' };
+  this.states = { 'left': false, 'right': false, 'forward': false, 'backward': false, 'fire':false};
   document.addEventListener('keydown', this.onKey.bind(this, true), false);
   document.addEventListener('keyup', this.onKey.bind(this, false), false);
   document.addEventListener('touchstart', this.onTouch.bind(this), false);
@@ -25,7 +26,10 @@ Controls.prototype.onTouch = function(e) {
 };
 
 Controls.prototype.onTouchEnd = function(e) {
-  this.states = { 'left': false, 'right': false, 'forward': false, 'backward': false };
+  this.states = { 
+    'left': false, 'right': false, 'forward': false, 'backward': false,
+    'fire': false
+  };
   e.preventDefault();
   e.stopPropagation();
 };
@@ -140,7 +144,56 @@ Player.prototype.update = function(controls, map, seconds) {
   if (controls.right) this.rotate(Math.PI * seconds);
   if (controls.forward) this.walk(3 * seconds, map);
   if (controls.backward) this.walk(-3 * seconds, map);
+  if (controls.fire) this.fire();
 };
+
+Player.prototype.fire = function(){
+  //check if a person is in the line of fire
+  console.log('fire!');
+
+  if(shotDelay){
+    return;
+  }
+
+
+  // var x = column / camera.resolution - 0.5;
+  // var angle = Math.atan2(x, camera.focalLength);
+  var ray = map.cast(this, this.direction, camera.range);
+  var hit = -1;
+  var width = Math.ceil(camera.spacing);
+  while (++hit < ray.length && ray[hit].height <= 0);
+
+  //loop through all rays in ray
+  for (var s = ray.length - 1; s >= 0; s--) {
+    var step = ray[s];
+
+    if(step.height >= 100){
+      // console.log('Shots fired!', step);
+      //hit a player, reduce their health
+      eachPlayer(function(hitPlayer){
+        // console.log('this player: ', hitPlayer);
+        //if the bullet lands within the players width and height
+        if(step.x >= Math.floor(hitPlayer.x) && step.x < Math.floor(hitPlayer.x) + width){
+        // if(Math.floor(hitPlayer.x) === Math.floor(step.x) && Math.floor(hitPlayer.y) === Math.floor(step.y)){
+          shotDelay = true;
+          setTimeout(function(){
+            shotDelay = false;
+          }, 500);
+          var fbPlayer = getPlayer(hitPlayer.username);
+          // console.log('hit confirmed, ', hitPlayer);
+          var healthAddition = -10;
+
+          // console.log('hitPlayer health: ', hitPlayer.health);
+          var health = parseInt(hitPlayer.health) + healthAddition + '';
+          // console.log('health: ', health);
+          setPlayer(fbPlayer, {health:health});
+        }
+      });
+    }
+  }
+};
+
+
 
 function Map(size) {
   this.size = size;
@@ -289,6 +342,9 @@ Camera.prototype.drawColumns = function(player, map) {
   for (var column = 0; column < this.resolution; column++) {
     var x = column / this.resolution - 0.5;
     var angle = Math.atan2(x, this.focalLength);
+    // if(true){ // CHANGE THIS!!!
+    //   angle = 90;
+    // }
 
     //ray = an array of rays where ray[n].height === game field row
     var ray = map.cast(player, player.direction + angle, this.range);
@@ -325,10 +381,14 @@ Camera.prototype.drawColumn = function(column, ray, angle, map) {
 
     if(step.height >= 200){
       texture = map.deathTexture;
+      //Makes sprite tall and thin
+      // angle = 90;//player.direction-90;
       step.height=1;
     }else if(step.height >= 100){
       texture = map.playerTexture;
-      step.height=1;
+      // angle = 90;//player.direction-90;
+      step.height=0.7;
+      // width *= .5;
     }
 
     var rainDrops = Math.pow(Math.random(), 3) * s;
@@ -340,6 +400,7 @@ Camera.prototype.drawColumn = function(column, ray, angle, map) {
       var wall = this.project(step.height, angle, step.distance);
 
       ctx.globalAlpha = 1;
+      // ctx.drawImage(texture.image, textureX, 0, 0.5, texture.height, left, wall.top, width, wall.height);
       ctx.drawImage(texture.image, textureX, 0, 1, texture.height, left, wall.top, width, wall.height);
       
       ctx.fillStyle = '#000000';
@@ -381,6 +442,8 @@ GameLoop.prototype.frame = function(time) {
   requestAnimationFrame(this.frame);
 };
 
+
+
 var display = document.getElementById('display');
 var startX = 5;//15.3
 var startY = 5;//-1.2
@@ -411,6 +474,22 @@ var matrix =
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ];
 map.setGridLayout(matrix);
+
+function Sprite(height, distance){
+  var z = distance;
+  var wallHeight = this.height*height/z;
+  var bottom = this.height/2*(2/z);
+  return {
+    top:bottom-wallHeight,
+    height:wallHeight
+  };
+
+}
+
+var spriteBuffer = new Uint8Array(map.size*map.size);
+var zBuffer = new Uint8Array (map.size);
+var spriteOrder = [];
+var spriteDistance = [];
 
 loop.start(function frame(seconds) {
   map.update(seconds);

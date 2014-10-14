@@ -128,7 +128,9 @@ var eachPlayer = function(callback, after){
 	for(var key in players){
 		callback(players[key]);
 	}
-	after();
+	if(after){
+		after();
+	}
 };	
 
 var getPlayer = function(name){
