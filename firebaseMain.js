@@ -77,8 +77,8 @@ usersRef.on('child_changed', function(snapshot){
 
 			//Tell Player that they died
 			// player = new Player(15.3, -1.2, Math.PI * 0.3);
-			player.x = 15.3;
-			player.y = -1.2;
+			player.x = startX;
+			player.y = startY;
 			player.direction = Math.PI * 0.3;
 
 			setTimeout(function(){
