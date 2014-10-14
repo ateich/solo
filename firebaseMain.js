@@ -1,5 +1,4 @@
 //Each game has its own URL for user data
-
 var usersRef = new Firebase('https://mvpfps.firebaseio.com');
 var players = {};
 var thisPlayer;
@@ -7,6 +6,16 @@ var username = 'Player2';
 var deaths = 0;
 var kills = 0;
 var dead = false;
+
+window.onkeyup = function(e) {
+   var key = e.keyCode ? e.keyCode : e.which;
+
+   if (key == 13) {
+       if(document.getElementById('main').style.display !== 'none'){
+       	startGame();
+       }
+   }
+}
 
 
 var startGame = function(){
@@ -34,6 +43,24 @@ usersRef.on('child_added', function(snapshot) {
 	var newPlayer = snapshot.val();
 	console.log('Added player: ', newPlayer.username);
   players[newPlayer.username] = newPlayer;
+
+  var numPlayers = Object.keys(players).length;
+
+  if(numPlayers === 1){
+ 		document.getElementById('numPlayers').innerHTML = numPlayers +' Player is in the Game';
+  } else {
+  	document.getElementById('numPlayers').innerHTML = numPlayers +' Players are in the Game';
+  }
+});
+
+usersRef.on('child_removed', function(snapshot){
+	delete players[snapshot.val().username];
+	var numPlayers = Object.keys(players).length;
+	 if(numPlayers === 1){
+			document.getElementById('numPlayers').innerHTML = numPlayers +' Player is in the Game';
+	 } else {
+	 	document.getElementById('numPlayers').innerHTML = numPlayers +' Players are in the Game';
+	 }
 });
 
 //Update players that have been changed
