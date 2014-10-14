@@ -132,7 +132,7 @@ Player.prototype.walk = function(distance, map) {
         var health = parseInt(player.health) + healthAddition + '';
         setPlayer(hitPlayer, {health: health});
         console.log('shot player');
-        if(health <= 0){
+        if(health === 0 && map.get(player.x, player.y) < 200){
           console.log('kill confirmed');
           kills++;
           document.getElementById('kills').innerHTML = 'Kills: ' + kills;
@@ -220,13 +220,15 @@ Player.prototype.fire = function(){
           // console.log('hitPlayer health: ', hitPlayer.health);
           var health = parseInt(hitPlayer.health) + healthAddition + '';
           // console.log('health: ', health);
-          setPlayer(fbPlayer, {health:health});
 
-          if(health <= 0){
+          var status = parseInt(map.get(hitPlayer.x, hitPlayer.y));
+          console.log('test: ', status, " health: ", health);
+          if(health <= 0 &&  status < 200){
             console.log('kill confirmed');
             kills++;
             document.getElementById('kills').innerHTML = 'Kills: ' + kills;
           }
+          setPlayer(fbPlayer, {health:health});
         }
       });
     }
@@ -242,8 +244,10 @@ function Map(size) {
   this.wallTexture = new Bitmap('assets/wall_texture.jpg', 1024, 1024);
   // this.wallTexture = new Bitmap('assets/fuzzy.png', 1024, 1112);
   // this.playerTexture = new Bitmap('assets/player_texture.jpg', 1024, 1024);
-  this.playerTexture = new Bitmap('assets/fuzzy.png', 1024, 1112);
-  this.deathTexture = new Bitmap('assets/death_texture.jpg', 1024, 1024);
+  // this.playerTexture = new Bitmap('assets/fuzzy.png', 1024, 1112);
+  this.playerTexture = new Bitmap('assets/robot.png', 639, 1176);
+  // this.deathTexture = new Bitmap('assets/death_texture.jpg', 1024, 1024);
+  this.deathTexture = new Bitmap('assets/robot_dead.png', 639, 1176);
   this.hitPlayerTexture = new Bitmap('assets/hit_player_texture.jpg', 1024, 1024);
   this.light = 0;
 }
