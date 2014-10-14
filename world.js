@@ -176,7 +176,7 @@ Map.prototype.set = function(x, y, num){
 Map.prototype.randomize = function() {
   //Randomly generate walls (~ <1/3 of spaces are walls)
   for (var i = 0; i < this.size * this.size; i++) {
-    this.wallGrid[i] = 0;//Math.random() < 0.3 ? 1 : 0;
+    this.wallGrid[i] = Math.random() < 0.3 ? 1 : 0;
   }
 };
 
