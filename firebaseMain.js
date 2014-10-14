@@ -42,7 +42,7 @@ usersRef.on('child_changed', function(snapshot){
 		map.set(oldPlayer.x, oldPlayer.y, 0);
 		
 		//Move player to new location on screen (101 now, change later)
-  	console.log("FB SET MAP LOCATION: (", player.x, ", ", player.y, ") to ", 101);
+  	// console.log("FB SET MAP LOCATION: (", player.x, ", ", player.y, ") to ", 101);
   	if(player.health <= 0){
 			//die
 			//201 = death animation or color change
@@ -87,11 +87,12 @@ var updatePlayerHealth = function(healthAddition){
 }
 
 //Passes player object to callback, for each player
-var eachPlayer = function(callback){
-	console.log('each player, ', players);
+var eachPlayer = function(callback, after){
+	// console.log('each player, ', players);
 	for(var key in players){
 		callback(players[key]);
 	}
+	after();
 };	
 
 var getPlayer = function(name){

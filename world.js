@@ -1,5 +1,6 @@
 var gameCell = document.getElementById('game');
 gameCell.style.display = 'none';
+var hitDelay = false;
 
 var CIRCLE = Math.PI * 2;
 var MOBILE = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
@@ -88,7 +89,7 @@ Player.prototype.walk = function(distance, map) {
     }
   }
 
-  if(hitPlayer.x || hitPlayer.y){
+  if(!hitDelay && (hitPlayer.x || hitPlayer.y)){
     //this player loses health
     console.log('losing health');
     var healthAddition = -10;
@@ -98,11 +99,21 @@ Player.prototype.walk = function(distance, map) {
     hitPlayer.y = hitPlayer.y || this.y;
     var playerLocation = {x: Math.floor(hitPlayer.x), y:Math.floor(hitPlayer.y)};
 
+    //You can only hit someone once every second
+    hitDelay = true;
+    setTimeout(function(){
+      console.log('reset hit delay');
+      hitDelay = false;
+    }, 1000);
+
     eachPlayer(function(player){
+      if(player.username === username){return;}
       console.log('name: ', player.username, ' at (', player.x, ', ', player.y ,')');
       console.log('vs at (', playerLocation.x, ',', playerLocation.y,  ')')
+      
       if(Math.floor(player.x) === playerLocation.x || Math.floor(player.y) === playerLocation.y){
         console.log('hit ', player.username);
+
 
         var hitPlayer = getPlayer(player.username);
         var health = parseInt(player.health) + healthAddition + '';
@@ -111,11 +122,9 @@ Player.prototype.walk = function(distance, map) {
           kills++;
           document.getElementById('kills').innerHTML = 'Kills: ' + kills;
         }
-
-        updatePlayerHealth(healthAddition);
         return;
       }
-    });
+    }, function(){ updatePlayerHealth(healthAddition);});
 
   }
 
