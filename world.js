@@ -228,7 +228,7 @@ Player.prototype.fire = function(){
             kills++;
             document.getElementById('kills').innerHTML = 'Kills: ' + kills;
           }
-          setPlayer(fbPlayer, {health:health});
+          setPlayer(fbPlayer, {health:health, killedBy:username});
         }
       });
     }

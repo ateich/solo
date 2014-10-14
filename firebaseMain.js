@@ -104,6 +104,7 @@ usersRef.on('child_changed', function(snapshot){
 			deaths++;
 			document.getElementById('deaths').innerHTML = 'Deaths: ' + deaths;
 
+			document.getElementById('youDied').innerHTML = 'Killed by ' + player.killedBy;
 			var respawnTime = 3;
 			document.getElementById('respawnCount').innerHTML = "Respawning in " + respawnTime;
 			countdown(respawnTime, function(seconds){
