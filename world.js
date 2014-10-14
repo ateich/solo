@@ -131,7 +131,9 @@ Player.prototype.walk = function(distance, map) {
         var hitPlayer = getPlayer(player.username);
         var health = parseInt(player.health) + healthAddition + '';
         setPlayer(hitPlayer, {health: health});
+        console.log('shot player');
         if(health <= 0){
+          console.log('kill confirmed');
           kills++;
           document.getElementById('kills').innerHTML = 'Kills: ' + kills;
         }
@@ -199,7 +201,7 @@ Player.prototype.fire = function(){
 
           setTimeout(function(){
             shotDelay = false;
-          }, 500);
+          }, 100);
 
           // setTimeout(function(){
           //   var unhitPlayer = players[this.username];
@@ -219,6 +221,12 @@ Player.prototype.fire = function(){
           var health = parseInt(hitPlayer.health) + healthAddition + '';
           // console.log('health: ', health);
           setPlayer(fbPlayer, {health:health});
+
+          if(health <= 0){
+            console.log('kill confirmed');
+            kills++;
+            document.getElementById('kills').innerHTML = 'Kills: ' + kills;
+          }
         }
       });
     }
