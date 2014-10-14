@@ -58,7 +58,8 @@ function Player(x, y, direction) {
   this.x = x;
   this.y = y;
   this.direction = direction;
-  this.weapon = new Bitmap('assets/knife_hand.png', 319, 320);
+  // this.weapon = new Bitmap('assets/knife_hand.png', 319, 320);
+  this.weapon = new Bitmap('assets/gunHand1.png', 319, 320);
   this.paces = 0;
 }
 
