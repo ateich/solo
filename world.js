@@ -178,12 +178,31 @@ Player.prototype.fire = function(){
       eachPlayer(function(hitPlayer){
         // console.log('this player: ', hitPlayer);
         //if the bullet lands within the players width and height
-        if(step.x >= Math.floor(hitPlayer.x) && step.x < Math.floor(hitPlayer.x) + width){
+        console.log(step)
+        console.log(hitPlayer)
+        if((step.x >= Math.floor(hitPlayer.x) && step.x < Math.floor(hitPlayer.x) + width) ||
+          step.x >= Math.ceil(hitPlayer.x) && step.x < Math.ceil(hitPlayer.x) + width){
         // if(Math.floor(hitPlayer.x) === Math.floor(step.x) && Math.floor(hitPlayer.y) === Math.floor(step.y)){
           shotDelay = true;
+
+          //show that the player was hit
+          // map.set(hitPlayer.x, hitPlayer.y, 190);
+          // map.set(step.x, step.y, 190);
+
           setTimeout(function(){
             shotDelay = false;
           }, 500);
+
+          // setTimeout(function(){
+          //   var unhitPlayer = players[this.username];
+          //   map.set(this.x, this.y, 101);
+          //   if(unhitPlayer){
+          //     console.log('make not red damnit!');
+          //     map.set(unhitPlayer.x, unhitPlayer.y, 101);
+          //   }
+          // }.bind(hitPlayer), 5000);
+
+
           var fbPlayer = getPlayer(hitPlayer.username);
           // console.log('hit confirmed, ', hitPlayer);
           var healthAddition = -10;
@@ -207,6 +226,7 @@ function Map(size) {
   this.wallTexture = new Bitmap('assets/wall_texture.jpg', 1024, 1024);
   this.playerTexture = new Bitmap('assets/player_texture.jpg', 1024, 1024);
   this.deathTexture = new Bitmap('assets/death_texture.jpg', 1024, 1024);
+  this.hitPlayerTexture = new Bitmap('assets/hit_player_texture.jpg', 1024, 1024);
   this.light = 0;
 }
 
@@ -388,7 +408,12 @@ Camera.prototype.drawColumn = function(column, ray, angle, map) {
       texture = map.deathTexture;
       //Makes sprite tall and thin
       // angle = 90;//player.direction-90;
-      step.height=1;
+      step.height=0.7;
+    }else if(step.height === 190){
+      console.log('make red damnit!');
+      //player hit
+      texture = map.hitPlayerTexture;
+      step.height=0.7;
     }else if(step.height >= 100){
       texture = map.playerTexture;
       // angle = 90;//player.direction-90;
