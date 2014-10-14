@@ -6,6 +6,7 @@ var thisPlayer;
 var username = 'Player2';
 var deaths = 0;
 var kills = 0;
+var dead = false;
 
 
 var startGame = function(){
@@ -68,7 +69,8 @@ usersRef.on('child_changed', function(snapshot){
 		document.getElementById('health').innerHTML = 'Health: ' + oldPlayer.health;
 		redFlash();
 
-		if(oldPlayer.health <= 0){
+		if(oldPlayer.health <= 0 && !dead){
+			dead = true;
 			//die leaving your body behind for x seconds
 			console.log('Firebase says you died!');
 			death.style.display = 'block';
@@ -88,6 +90,7 @@ usersRef.on('child_changed', function(snapshot){
 			player.direction = Math.PI * 0.3;
 
 			setTimeout(function(){
+				dead = false;
 				var reset = {username:username, x:0, y:0, health:100};
 				updatePlayer(reset);
 				players[username] = reset;
