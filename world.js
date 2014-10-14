@@ -1,5 +1,6 @@
 var gameCell = document.getElementById('game');
 gameCell.style.display = 'none';
+death.style.display = 'none';
 var hitDelay = false;
 
 var CIRCLE = Math.PI * 2;

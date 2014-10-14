@@ -54,22 +54,50 @@ usersRef.on('child_changed', function(snapshot){
 		//Update player list
 		players[player.username] = player;
 
-	} else if(player.health !== oldPlayer.health){
+	} 
+	else if(player.health !== oldPlayer.health){
 
 		//update player health as necessary
 		oldPlayer.health = player.health;
 		if(oldPlayer.health <= 0){
 			//die leaving your body behind for x seconds
+			console.log('Firebase says you died!');
+			death.style.display = 'block';
 			deaths++;
 			document.getElementById('deaths').innerHTML = 'Deaths: ' + deaths;
+
+			var respawnTime = 3;
+			document.getElementById('respawnCount').innerHTML = "Respawning in " + respawnTime;
+			countdown(respawnTime, function(seconds){
+				document.getElementById('respawnCount').innerHTML = "Respawning in " + seconds;
+			});
+
+			//Tell Player that they died
+			// player = new Player(15.3, -1.2, Math.PI * 0.3);
+			player.x = 15.3;
+			player.y = -1.2;
+			player.direction = Math.PI * 0.3;
+
 			setTimeout(function(){
 				var reset = {username:username, x:0, y:0, health:100};
 				updatePlayer(reset);
 				players[username] = reset;
-			}, 1000);
+				death.style.display = 'none';
+			}, 3000);
 		}
 	}
 });
+
+var countdown = function(seconds, doEachSecond){
+	if(seconds === 0){
+		return;
+	}
+
+	setInterval(function(){
+		doEachSecond(seconds-1);
+		countdown(seconds-1, doEachSecond);
+	}, 1000);
+}
 
 //Update this player in firebase
 var updatePlayer = function(obj){

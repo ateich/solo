@@ -5,3 +5,19 @@
 	color:white;
 }
 
+#death{
+	position:absolute;
+	x:0;
+	y:0;
+	width:100%;
+	height:100%;
+	background-color: rgba(255,0,0,1);
+	z-index: 2;
+	text-align: center;
+}
+
+#death h1, #death h3{
+	color:black;
+	padding-top:2em;
+}
+
