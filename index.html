@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Streets of San Francisco</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+    <script src="firebaseMain.js"></script>
+  </head>
+  <body style='background: #000; margin: 0; padding: 0; width: 100%; height: 100%;'>
+    <div id="main">
+      <h1>SF Streets</h1>
+      <p id="numPlayers">0 Players are in the Game</p>
+      <input id="playerName" autofocus type="text" placeholder="Enter your name"></input>
+      <br/><br/>
+      <button id="joinGame" onclick="startGame()">Join Game</button>
+      <br/><br/>
+      <h3>Controls</h3>
+        <p>Use arrow keys to move</p>
+        <p>Spacebar fires weapon</p>
+    </div>
+    <div id="gameMessage">
+    </div>
+    <div id="death">
+      <h1>You Died!</h1>
+      <h3 id="youDied"></h3>
+      <h3 id="respawnCount">Respawning...</h3>
+    </div>
+    <div id="hit">
+    </div>
+    <div id="game">
+      <div id="scoreBoard">
+        <h3 id="health">Health: 100</h3>
+        <h3 id="kills">Kills: 0</h3>
+        <h3 id="deaths">Deaths: 0</h3>
+      </div>
+      <canvas id='display' width='1' height='1' style='width: 100%; height: 100%;' />
+      <script src="world.js"></script>
+    </div>
+  </body>
+</html>
